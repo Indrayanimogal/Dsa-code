@@ -1,0 +1,213 @@
+
+import.util.HashSet;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Set;
+
+class Set {
+    private Set<Integer> set;
+
+    // Creates an empty set instance.
+    public Set(int initElementsCount) {
+        set = new HashSet<>();
+        Scanner scanner = new Scanner(System.in);
+        for (int i = 0; i < initElementsCount; i++) {
+            System.out.print("Enter Element " + (i + 1) + ": ");
+            int e = scanner.nextInt();
+            add(e);
+        }
+        scanner.close();
+    }
+
+    public Set<Integer> getSet() {
+        return set;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder("\n{ ");
+        Iterator<Integer> iterator = set.iterator();
+        while (iterator.hasNext()) {
+            string.append(iterator.next());
+            if (iterator.hasNext()) {
+                string.append(" , ");
+            }
+        }
+        string.append(" }\n");
+        return string.toString();
+    }
+
+    // Returns the number of items in the set.
+    public int size() {
+        return set.size();
+    }
+
+    // Determines if an element is in the set.
+    public boolean contains(int e) {
+        return set.contains(e);
+    }
+
+    // Determines if the set is empty.
+    public boolean isEmpty() {
+        return set.isEmpty();
+    }
+
+    // Adds a new unique element to the set.
+    public void add(int e) {
+        set.add(e);
+    }
+
+    // Removes an e from the set.
+    public void remove(int e) {
+        set.remove(e);
+    }
+
+    // Determines if this set is equal to setB.
+    public boolean equals(Set setB) {
+        return set.equals(setB.getSet());
+    }
+
+    // Determines if this set is a subset of setB.
+    public boolean isSubsetOf(Set setB) {
+        return setB.getSet().containsAll(set);
+    }
+
+    // Determines if this set is a proper subset of setB.
+    public boolean isProperSubset(Set setB) {
+        return isSubsetOf(setB) && !setB.isSubsetOf(this);
+    }
+
+    // Creates a new set from the union of this set and setB.
+    public Set union(Set setB) {
+        Set<Integer> newSet = new HashSet<>(set);
+        newSet.addAll(setB.getSet());
+        return new Set(newSet);
+    }
+
+    // Creates a new set from the intersection: self set and setB.
+    public Set intersect(Set setB) {
+        Set<Integer> newSet = new HashSet<>(set);
+        newSet.retainAll(setB.getSet());
+        return new Set(newSet);
+    }
+
+    // Creates a new set from the difference: self set and setB.
+    public Set difference(Set setB) {
+        Set<Integer> newSet = new HashSet<>(set);
+        newSet.removeAll(setB.getSet());
+        return new Set(newSet);
+    }
+
+    // Creates the iterator for traversing the list of items
+    public Iterator<Integer> iterator() {
+        return set.iterator();
+    }
+}
+
+public class Main {
+    public static Set createSet() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter number of Elements in set: ");
+        int n = scanner.nextInt();
+        return new Set(n);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Create Set A");
+        Set s1 = createSet();
+        System.out.println(s1);
+
+        int choice = 0;
+        while (choice != 10) {
+            System.out.println("|-------------------|");
+            System.out.println("| Menu              |");
+            System.out.println("| 1.Add             |");
+            System.out.println("| 2.Remove          |");
+            System.out.println("| 3.Contains        |");
+            System.out.println("| 4.Size            |");
+            System.out.println("| 5.Intersection    |");
+            System.out.println("| 6.Union           |");
+            System.out.println("| 7.Difference      |");
+            System.out.println("| 8.Subset          |");
+            System.out.println("| 9.Proper Subset   |");
+            System.out.println("| 10.Exit           |");
+            System.out.println("|-------------------|");
+
+            System.out.print("Enter Choice: ");
+            choice = scanner.nextInt();
+
+            if (choice == 1) {
+                System.out.print("Enter Number to Add: ");
+                int e = scanner.nextInt();
+                s1.add(e);
+                System.out.println(s1);
+            } else if (choice == 2) {
+                System.out.print("Enter Number to Remove: ");
+                int e = scanner.nextInt();
+                s1.remove(e);
+                System.out.println(s1);
+            } else if (choice == 3) {
+                System.out.print("Enter Number to Search: ");
+                int e = scanner.nextInt();
+                if (s1.contains(e)) {
+                    System.out.println("Number Present in Set");
+                } else {
+                    System.out.println("Number is not Present in Set");
+                }
+                System.out.println(s1);
+            } else if (choice == 4) {
+                System.out.println("Set Contains " + s1.size() + " elements");
+            } else if (choice == 5) {
+                System.out.println("Create a Set B for doing Intersection Operation");
+                Set s2 = createSet();
+                Set s3 = s1.intersect(s2);
+                System.out.println("Set A = " + s1);
+                System.out.println("Set B = " + s2);
+                System.out.println("Intersection = " + s3);
+            } else if (choice == 6) {
+                System.out.println("Create a Set B for doing Union Operation");
+                Set s2 = createSet();
+                Set s3 = s1.union(s2);
+                System.out.println("Set A = " + s1);
+                System.out.println("Set B = " + s2);
+                System.out.println("Union = " + s3);
+            } else if (choice == 7) {
+                System.out.println("Create a Set B for calculating Set Difference");
+                Set s2 = createSet();
+                Set s3 = s1.difference(s2);
+                System.out.println("Set A = " + s1);
+                System.out.println("Set B = " + s2);
+                System.out.println("Difference = " + s3);
+            } else if (choice == 8) {
+                System.out.println("Create a Set B for checking Subset or not");
+                Set s2 = createSet();
+                boolean isSubset = s1.isSubsetOf(s2);
+                System.out.println("Set A = " + s1);
+                System.out.println("Set B = " + s2);
+                if (isSubset) {
+                    System.out.println("Set B is the Subset of Set A");
+                } else {
+                    System.out.println("Set B is not a Subset of Set A");
+                }
+            } else if (choice == 9) {
+                System.out.println("Create a Set B for checking ProperSubset or not");
+                Set s2 = createSet();
+                boolean isProperSubset = s1.isProperSubset(s2);
+                System.out.println("Set A = " + s1);
+                System.out.println("Set B = " + s2);
+                if (isProperSubset) {
+                    System.out.println("Set B is the Proper Subset of Set A");
+                } else {
+                    System.out.println("Set B is not a Proper Subset of Set A");
+                }
+            } else if (choice == 10) {
+                break;
+            } else {
+                System.out.println("Please Enter Valid Choice");
+            }
+        }
+        scanner.close();
+    }
+}
+
